@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %} Create Event {% endblock %}
+{% block content %}
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard">Home </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create/event">Create Event</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/search">Search</a>
+            </li>
+        </ul>
+    </div>
+    <div class="sub-header">
+        <div>
+            <form  action="/logout">
+                <button class="action_button bg-warning" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>  -->
+<body>
+    <h1>Create your event</h1>
+    {% if messages %}
+            <ul class="messages justify-content-around">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{message.tags}}" {% endif %}>
+                        {{message}}
+                    </li>
+                {% endfor %}
+            </ul>
+    {% endif %}
+    <div class="d-flex flex-wrap justify-content-around">
+        <form action="/create_event" method="POST" class="index_forms bg-primary-subtle border">
+            {% csrf_token %}
+            <div class="form_container d-flex flex-wrap justify-content-space-between">
+                <div class="form_group_left">
+                    <div class="form_group">
+                        <label for="title">Event title:</label>
+                        <input type="text" name="title" class="form-control">
+                    </div>
+                    <div class="form_group">
+                        <label for="date">Date:</label>
+                        <input type="date" name="date" class="form-control">
+                    </div>
+                    <div class="form_group">
+                        <label for="time">Time:</label>
+                        <input type="time" name="time" class="form-control">
+                    </div>
+                    <div class="form_group">
+                        <label for="max_attendees">Max Attendees:</label>
+                        <input type="int" name="max_attendees" class="form-control">
+                    </div>
+                    <div class="form_group">
+                        <label for="information">Information:</label>
+                        <input type="text" name="information" class="form-control">
+                    </div>
+                </div>
+                <div class="form_group_right">
+                    <div class="form_group">
+                        <label for="location">Location:</label>
+                        <div class="pac-card">
+                            <div>
+                                <div id="title">Autocomplete search</div>
+                                <div id="type-selector" class="pac-controls">
+                                    <input
+                                    type="radio"
+                                    name="type"
+                                    id="changetype-all"
+                                    checked="checked"
+                                    />
+                                    <label for="changetype-all">All</label>
+                                    
+                                    <input type="radio" name="type" id="changetype-establishment" />
+                                    <label for="changetype-establishment">establishment</label>
+                                    
+                                    <input type="radio" name="type" id="changetype-address" />
+                                    <label for="changetype-address">address</label>
+                                    
+                                    <input type="radio" name="type" id="changetype-geocode" />
+                                            <label for="changetype-geocode">geocode</label>
+                                            
+                                            <input type="radio" name="type" id="changetype-cities" />
+                                            <label for="changetype-cities">(cities)</label>
+                                            
+                                            <input type="radio" name="type" id="changetype-regions" />
+                                            <label for="changetype-regions">(regions)</label>
+                                        </div>
+                                        <br />
+                                        <div id="strict-bounds-selector" class="pac-controls">
+                                            <input type="checkbox" id="use-location-bias" value="" />
+                                            <label for="use-location-bias">Bias to map viewport</label>
+                                            
+                                            <input type="checkbox" id="use-strict-bounds" value="" />
+                                            <label for="use-strict-bounds">Strict bounds</label>
+                                        </div>
+                                    </div>
+                                    <div id="pac-container">
+                                        <label for="location"></label>
+                                        <input id="pac-input" type="text" name="location" placeholder="Enter a location" />
+                                    </div>
+                                    <div id="map"></div>
+                                    <div id="infowindow-content">
+                                        <span id="place-name" class="title"></span><br/>
+                                        <span id="place-address"></span>
+                                    </div>
+                                </div>           
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Create event" class="action_button bg-success-subtle">
+        </form>
+</body>
+{% endblock %}

@@ -1,71 +1,100 @@
 {% extends 'base.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Home </span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="/create/event">New event</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown link
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+                <a class="nav-link" href="/search">Search</a>
             </li>
         </ul>
     </div>
-    <div class="sub-header">
+    <div class="sub-header ">
+        <div>
+            <form  action="/account/{{one_user.id}}">
+                <button class="action_button bg-info" type="submit">Account</button>
+            </form>
+        </div>
         <div>
             <form  action="/logout">
                 <button class="action_button bg-warning" type="submit">Logout</button>
             </form>
         </div>
     </div>
-</nav> 
+</nav>  -->
 <body>
     <h1>Welcome, {{one_user.first_name}} </h1>
-    <h5 class="page_title">Today is {DATE} and your events are:</h5>
-    <table class="table">
-        <thead>
-            <th>Event Name</th>
-            <th>Location</th>
-            <th>Time</th>
-            <th>Number of attendees</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <h5 class="page_title">Here are your joined future events:</h5>
-    <table class="table">
-        <thead>
-            <th>Event Name</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Number of attendees</th>
-        </thead>
-        <tbody>
+    {% if not user_events %}
+        <h3 class="pb-5">You have not yet created an event, click <a href="/create/event">here</a> to do so</h3>
+    {% else %}
+    <div class="container col-10 p-4">
+        <h5 class="page_title">Today is {{todays_date}} and your events are:</h5>
+        <table class="table table-striped table-bordered" id="sortTable1">
+            <thead>
                 <tr>
-                    <td></td>
+                    <th>Event Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Number of attendees</th>
+                    <th>Action</th>
                 </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for event in user_events %}
+                <tr>
+                    <td>{{event.title}}</td>
+                    <td>{{event.location}}</td>
+                    <td>{{event.time}}</td>
+                    <td>{{event.number_of_attendees}}/{{event.max_attendees}}</td>
+                    <td>
+                        <a href="/cancel_event/{{event.id}}">Cancel Event</a> / 
+                        <a href="/view_event/{{event.id}}">See Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>  
+    {% endif %}
+    {% if not future_events %}
+        <h3 class="pb-5">You have not yet joined any events, click <a href="/search">here</a> to do so</h3>
+    {% else %}
+    <div class="container col-10 p-4">
+        <h5 class="page_title">Here are your joined future events:</h5>
+        <table class="table table-striped table-bordered" id="sortTable2">
+            <thead>
+                <th>Event Name</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Number of attendees</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for event in future_events %}
+                <tr>
+                    <td>{{event.title}}</td>
+                    <td>{{event.location}}</td>
+                    <td>{{event.date}} {{event.time}}</td>
+                    <td>{{event.number_of_attendees}}/{{event.max_attendees}}</td>
+                    <td><a href="/view_event/{{event.id}}">See Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    <script>
+    $('#sortTable1').DataTable();
+    $('#sortTable2').DataTable();
+    </script>
 </body>
 {% endblock %}

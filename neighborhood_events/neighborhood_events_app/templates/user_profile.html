@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %} User Account Info {% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard">Home </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create/event">New event</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/search">Search</a>
+            </li>
+        </ul>
+    </div>
+    <div class="sub-header ">
+        <div class="avatar">
+            <img src="neighborhood_events_app\templates\user_profile.html" alt="user-profile-picture">
+        </div>
+        <div>
+            <form  action="/logout">
+                <button class="action_button bg-warning" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav> 
+<body>
+    <div >
+        <p>First name: {{user.first_name}}</p>
+        <p>Last name: {{user.last_name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Password: *************</p>
+        <p>Date of Birth: {{user.dob}}</p>
+        <button onclick="show_update_form()">Update Info</button>
+    </div>
+    <div style="visibility: hidden;" class="d-flex flex-wrap justify-content-around" id="update_user">
+        <form class="index_forms" action="/update_user/{{user.id}}" method="POST" class="bg-primary-subtle border">
+            {% csrf_token %}
+            <h2 class="text-primary">Update {{user.first_name}}'s Profile</h2>
+            {% if messages %}
+            <ul style="visibility: visible;" class="messages justify-content-around">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{message.tags}}" {% endif %}>
+                        {{message}}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="form_group">
+                <input type="hidden" name="id" class="form-control" value="{{user.id}}">
+            </div>
+            <div class="form_group">
+                <label for="first_name">First Name:</label>
+                <input type="text" name="first_name" class="form-control" value="{{user.first_name}}">
+            </div>
+            <div class="form_group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" name="last_name" class="form-control" value="{{user.last_name}}">
+            </div>
+            <div class="form_group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" class="form-control" value="{{user.email}}">
+            </div>
+            <div class="form_group">
+                <label for="current_password">Current Password:</label>
+                <input type="password" name="current_password" class="form-control">
+            </div>
+            <div class="form_group">
+                <label for="new_password">New Password:</label>
+                <input type="password" name="new_password" class="form-control">
+            </div>
+            <div class="form_group">
+                <label for="confirm_new_password">Confirm New Password:</label>
+                <input type="password" name="confirm_new_password" class="form-control">
+            </div>
+            <div class="form_group">
+                <label for="dob">Date of birth:</label>
+                <input type="date" name="dob" class="form-control" value="{{date}}">
+            </div>
+            <div class="form_group p-2">
+                <label for="secret_question">Select Secret Question:</label>
+                <select class="form-control" name="secret_question">
+                    <option>What was the name of your first pet ?</option>
+                    <option>What is your mother's maiden's name ?</option>
+                    <option>What street did you grow up on ?</option>
+                </select>
+            </div>
+            <div class="form_group p-2">
+                <input type="text" name="secret_answer" class="form-control">
+            </div>
+            <input class="action_button bg-primary-subtle" type="submit" value="Confirm">
+        </form>
+    </div>
+</body>
+{% endblock %}

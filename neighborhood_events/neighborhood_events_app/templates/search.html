@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block content %}
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard">Home </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create/event">New event</a>
+            </li>
+        </ul>
+    </div>
+    <div class="sub-header">
+        <div>
+            <form  action="/logout">
+                <button class="action_button bg-warning" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>  -->
+<body>
+
+    <form method="get" action="target_search">
+        <button type="submit" style="float: right;"> Search </button>
+        <input type="text" name="search" placeholder="Event name" style="float: right;">
+    </form>
+    <br></br>
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+            <th>Event Name</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Number of attendees</th>
+            <th>Creator</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            {% if filtered_events %}
+                {% for filtered_event in filtered_events %}               
+                    <tr>
+                        <td>{{filtered_event.title}}</td>
+                        <td>{{filtered_event.location}}</td>
+                        <td>{{filtered_event.date}} {{filtered_event.time}}</td>
+                        {% if filtered_event.number_of_attendees == filtered_event.max_attendees %}
+                            <td>FULL</td>
+                        {% else %}
+                            <td>{{filtered_event.number_of_attendees}}/{{filtered_event.max_attendees}}</td>
+                        {% endif %}
+                        <td>{{filtered_event.user.first_name}}</td>
+                        <td><a href="/view_event/{{event.id}}">See Details</a></td>
+                    </tr>          
+                {% endfor %}
+                {% else %}
+                {% for event in all_events %}
+                <tr>
+                    <td>{{event.title}}</td>
+                    <td>{{event.location}}</td>
+                    <td>{{event.date}} {{event.time}}</td>
+                    {% if event.number_of_attendees == event.max_attendees %}
+                        <td>FULL</td>
+                    {% else %}
+                        <td>{{event.number_of_attendees}}/{{event.max_attendees}}</td>
+                    {% endif %}
+                    <td>{{event.user.first_name}}</td>
+                    <td><a href="/view_event/{{event.id}}">See Details</a></td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <div>
+        {% if filtered_events %}    
+            <a href="/search">Remove filters</a>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}
